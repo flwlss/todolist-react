@@ -1,15 +1,16 @@
 import React from 'react';
+import { useState } from 'react';
 import AddTodo from './components/AddTodo';
 import TodoList from './components/TodoList';
 import Context from './context';
 
 function App() {
-  const [todos, setTodos] = React.useState([
+  let [todos, setTodos] = React.useState([
     { id: 1, completed: false, title: 'купить хлеб' },
     { id: 2, completed: false, title: 'купить масло' },
     { id: 3, completed: false, title: 'купить молоко' }
   ])
-
+  const data = localStorage.getItem("todos");
   function toggleTodo(id: any) {
     setTodos(todos.map(todo => {
       if (todo.id === id) {
@@ -21,15 +22,21 @@ function App() {
 
   function removeTodo(id: any) {
     setTodos(todos.filter(todo => todo.id !== id))
+    // localStorage.setItem("todos", JSON.stringify(todos))
   }
 
-  function addTodo(title: any) {
+  function addTodo(title: any, id: any) {
     setTodos(todos.concat([{
-      title,
       id: Date.now(),
-      completed: false
-    }]))
+      completed: false,
+      title,
+    }
+    ])
+    )
+    localStorage.getItem("todos")
   }
+
+  localStorage.setItem("todos", JSON.stringify(todos))
 
   return (
     <Context.Provider value={{ removeTodo }}>
